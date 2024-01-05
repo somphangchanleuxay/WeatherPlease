@@ -7,6 +7,27 @@
     <title>Weather Please!</title>
 </head>
 <body>
+    <div class="navbar">
+        Weather Dashboard
+    </div>
+
+    <!-- Search For City Container -->
+    <aside class="citySearchContainer">
+        <form id="searchForm">
+            <label for="cityInput">Search for a City:</label>
+            <div class="textAreaSearch">
+                <input type="text" id="cityInput" placeholder="Search...">
+                <button type="button" id="searchButton">Search</button>
+            </div>
+        </form>
+        <!-- Search History Container -->
+        <div id="searchHistoryContainer"></div>
+        <!-- Weather Display Container -->
+        <div id="weatherContainer"></div>
+        <!-- 5-Day Forecast Display Container -->
+        <div id="forecastContainer"></div>
+    </aside>
+
     <script src="assets/script.js"></script>
 </body>
 </html>
