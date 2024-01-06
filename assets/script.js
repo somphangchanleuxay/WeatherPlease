@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Load search history from local storage and update the display
+    displaySearchHistory();
+    
+    // Other initialization code...
+});
+
     const searchButton = document.getElementById('searchButton');
     const weatherContainer = document.getElementById('weatherContainer');
 
@@ -175,4 +181,3 @@ function displaySearchHistory() {
             forecastContainer.innerHTML += weatherHTML;
         }
     }
-});
