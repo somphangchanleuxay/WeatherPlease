@@ -133,14 +133,30 @@ function displaySearchHistory() {
     }
 
 
-
     function displayCurrentWeather(data) {
         const city = data.name;
         const currentDate = new Date().toLocaleDateString();
         const temperature = data.main.temp;
         const windSpeed = data.wind.speed;
         const humidity = data.main.humidity;
-
+        const weatherCondition = data.weather[0].main; // Assuming the main weather condition is in the first item of the 'weather' array
+    
+        // Map between weather conditions and icons
+        const weatherIcons = {
+            'Clear': '☀️',
+            'Clouds': '☁️',
+            'Rain': '🌧️',
+            'Snow': '❄️',
+            'Thunderstorm': '⛈️',
+            'Drizzle': '🌦️',
+            'Mist': '🌫️',
+            'Fog': '🌁',
+            
+        };
+    
+        // Get the corresponding icon for the weather condition
+        const weatherIcon = weatherIcons[weatherCondition] || '❓'; // Default to question mark if condition not found
+    
         const currentWeatherHTML = `
             <div class="weatherInfo">
                 <h2>${city} - Current Weather</h2>
@@ -148,36 +164,83 @@ function displaySearchHistory() {
                 <p>Temperature: ${temperature} &#8451;</p>
                 <p>Wind Speed: ${windSpeed} m/s</p>
                 <p>Humidity: ${humidity}%</p>
+                <p>Condition: ${weatherCondition} ${weatherIcon}</p>
             </div>
         `;
-
+    
         weatherContainer.innerHTML = currentWeatherHTML;
     }
 
     function displayWeatherForecast(data) {
         const forecastList = data.list;
-
+    
         // Clear existing content in forecastContainer
         forecastContainer.innerHTML = '';
-
+    
+        // Get the current date
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0 for accurate comparison
+    
+        // Track dates to avoid duplicates
+        const displayedDates = [];
+    
         // Display weather information for each day in a separate div
-        for (let i = 0; i < forecastList.length; i += 8) {
+        for (let i = 0; i < forecastList.length; i++) {
             const forecastData = forecastList[i];
-            const date = new Date(forecastData.dt * 1000).toLocaleDateString();
-            const temperature = forecastData.main.temp;
-            const windSpeed = forecastData.wind.speed;
-            const humidity = forecastData.main.humidity;
-
-            const weatherHTML = `
-                <div class="weatherInfo">
-                    <h2>${date}</h2>
-                    <p>Temperature: ${temperature} &#8451;</p>
-                    <p>Wind Speed: ${windSpeed} m/s</p>
-                    <p>Humidity: ${humidity}%</p>
-                </div>
-            `;
-
-            // Append the new div to forecastContainer
-            forecastContainer.innerHTML += weatherHTML;
+            const forecastDate = new Date(forecastData.dt * 1000);
+    
+            // Skip the current day
+            if (forecastDate <= currentDate) {
+                continue;
+            }
+    
+            const dateKey = forecastDate.toLocaleDateString();
+    
+            // Check if the date has already been displayed
+            if (!displayedDates.includes(dateKey)) {
+                const date = forecastDate.toLocaleDateString();
+                const temperature = forecastData.main.temp;
+                const windSpeed = forecastData.wind.speed;
+                const humidity = forecastData.main.humidity;
+                const weatherCondition = forecastData.weather[0].main; // Assuming the main weather condition is in the first item of the 'weather' array
+    
+                // Map between weather conditions and icons
+                const weatherIcons = {
+                    'Clear': '☀️',
+                    'Clouds': '☁️',
+                    'Rain': '🌧️',
+                    'Snow': '❄️',
+                    'Thunderstorm': '⛈️',
+                    'Drizzle': '🌦️',
+                    'Mist': '🌫️',
+                    'Fog': '🌁',
+                    // Add more conditions and their corresponding icons as needed
+                    // ...
+                };
+    
+                // Get the corresponding icon for the weather condition
+                const weatherIcon = weatherIcons[weatherCondition] || '❓'; // Default to question mark if condition not found
+    
+                const weatherHTML = `
+                    <div class="weatherInfo">
+                        <h2>${date}</h2>
+                        <p>Temperature: ${temperature} &#8451;</p>
+                        <p>Wind Speed: ${windSpeed} m/s</p>
+                        <p>Humidity: ${humidity}%</p>
+                        <p>Condition: ${weatherCondition} ${weatherIcon}</p>
+                    </div>
+                `;
+    
+                // Append the new div to forecastContainer
+                forecastContainer.innerHTML += weatherHTML;
+    
+                // Add the date to the displayedDates array
+                displayedDates.push(dateKey);
+    
+                // Stop when 5 days are displayed
+                if (displayedDates.length >= 5) {
+                    break;
+                }
+            }
         }
     }
