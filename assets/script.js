@@ -202,7 +202,7 @@ function displaySearchHistory() {
                 const temperature = forecastData.main.temp;
                 const windSpeed = forecastData.wind.speed;
                 const humidity = forecastData.main.humidity;
-                const weatherCondition = forecastData.weather[0].main; // Assuming the main weather condition is in the first item of the 'weather' array
+                const weatherCondition = forecastData.weather[0].main; 
     
                 // Map between weather conditions and icons
                 const weatherIcons = {
@@ -214,8 +214,7 @@ function displaySearchHistory() {
                     'Drizzle': '🌦️',
                     'Mist': '🌫️',
                     'Fog': '🌁',
-                    // Add more conditions and their corresponding icons as needed
-                    // ...
+
                 };
     
                 // Get the corresponding icon for the weather condition
